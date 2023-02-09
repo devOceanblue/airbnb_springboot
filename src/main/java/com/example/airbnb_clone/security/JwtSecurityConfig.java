@@ -69,9 +69,11 @@ public class JwtSecurityConfig {
         return (web) -> {
             web.ignoring().requestMatchers(
                     HttpMethod.POST,
-                    "/auth/login");
+                    "/user/login");
             web.ignoring().requestMatchers(
                     HttpMethod.GET,
+                    "/v3/api-docs",
+                    "/api-docs",
                     "/",
                     "/webjars/**",
                     "/*.html",
