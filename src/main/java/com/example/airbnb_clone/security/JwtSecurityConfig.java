@@ -1,5 +1,6 @@
 package com.example.airbnb_clone.security;
 
+import com.example.airbnb_clone.exceptions.AuthenticationExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class JwtSecurityConfig {
     @Autowired
     public PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthenticationExceptionHandler authenticationExceptionHandler;
 
     @Autowired
     TokenHelper tokenHelper;
@@ -46,9 +50,9 @@ public class JwtSecurityConfig {
     public SecurityFilterChain JwtfilterChain(HttpSecurity http) throws Exception {
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling().authenticationEntryPoint(authenticationExceptionHandler).and()
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest.requestMatchers(HttpMethod.GET,
                         "/",
-                        "/auth/**",
                         "/webjars/**",
                         "/*.html",
                         "/favicon.ico",
@@ -72,7 +76,6 @@ public class JwtSecurityConfig {
                     "/user/login");
             web.ignoring().requestMatchers(
                     HttpMethod.GET,
-                    "/v3/api-docs",
                     "/api-docs",
                     "/",
                     "/webjars/**",
