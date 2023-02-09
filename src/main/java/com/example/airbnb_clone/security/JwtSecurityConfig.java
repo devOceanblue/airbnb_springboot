@@ -76,7 +76,8 @@ public class JwtSecurityConfig {
                     "/user/login");
             web.ignoring().requestMatchers(
                     HttpMethod.GET,
-                    "/api-docs",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
                     "/",
                     "/webjars/**",
                     "/*.html",
