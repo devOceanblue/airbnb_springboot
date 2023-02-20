@@ -106,4 +106,22 @@ public class TokenHelper {
                 .compact();
     }
 
+    public String refreshToken(String token) {
+        String refreshedToken;
+        Date now = new Date();
+        try {
+            final Claims claims = this.getAllClaimsFromToken(token);
+            claims.setIssuedAt(now);
+            refreshedToken = Jwts.builder()
+                    .setClaims(claims)
+                    .setExpiration(new Date(now.getTime() + 600 * 1000))
+                    .signWith(SignatureAlgorithm.HS512, SECRET )
+                    .compact();
+        } catch (Exception e) {
+            refreshedToken = null;
+        }
+        return refreshedToken;
+    }
+
+
 }
